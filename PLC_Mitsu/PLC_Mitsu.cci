@@ -1,0 +1,12 @@
+VERSION:3 SOURCE_TIMESTAMP:4D337011
+NODE:I LEVEL:0 LINE:24 "C:\cvavr\inc\mega8.h"
+NODE:I LEVEL:0 LINE:25 "C:\cvavr\inc\stdio.h"
+NODE:I LEVEL:0 LINE:26 "C:\cvavr\inc\delay.h"
+NODE:M LEVEL:0 LINE:27 "LED"
+NODE:V LEVEL:0 LINE:35 "rec -> RAM:????"
+NODE:F LEVEL:0 LINE:36 "main(void)"
+NODE:F LEVEL:0 LINE:54 "GPIO_Init(void)"
+NODE:F LEVEL:0 LINE:65 "UART_Init(void)"
+NODE:F LEVEL:0 LINE:110 "TransmitByte(unsigned char data)"
+NODE:F LEVEL:0 LINE:117 "ReceiveChar(void)"
+NODE:F LEVEL:0 LINE:122 "UART_Available(void)"

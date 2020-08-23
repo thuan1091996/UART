@@ -1,0 +1,22 @@
+RAM Allocation [bytes]
+Variable                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+rec                                                                               0x0160       4
+
+EEPROM Allocation [bytes]
+Variable                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+
+Register Allocation
+Variable                                                                          Register  Size
+------------------------------------------------------------------------------------------------
+
+FLASH Allocation [words]
+Function                                                                          Address   Size
+------------------------------------------------------------------------------------------------
+main                                                                              0x00036     42
+GPIO_Init                                                                         0x00060      4
+UART_Init                                                                         0x00064     11
+TransmitByte                                                                      0x0006F      7
+ReceiveChar                                                                       0x00076      2
+UART_Available                                                                    0x00078      9

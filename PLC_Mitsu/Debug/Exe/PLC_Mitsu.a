@@ -1,0 +1,242 @@
+;/*******************************************************
+;This program was created by the
+;CodeWizardAVR V3.12 Advanced
+;Automatic Program Generator
+;© Copyright 1998-2014 Pavel Haiduc, HP InfoTech s.r.l.
+;http://www.hpinfotech.com
+;
+;Project : Project_UART
+;Version : v.1.0
+;Date    : 8/2/2018
+;Author  : Tran Minh Thuan
+;Company : VMMachine
+;Comments:
+;Receiver and Transmittor
+;UCPOL=0 --  Data change at rising edge and sampling at falling edge
+;Chip type               : ATmega8
+;Program type            : Application
+;AVR Core Clock frequency: 8.000000 MHz
+;Memory model            : Small
+;External RAM size       : 0
+;Data Stack size         : 256
+;*******************************************************/
+;
+;#include <mega8.h>
+;PCODE: $00000000 VOL: 0
+	#ifndef __SLEEP_DEFINED__
+;PCODE: $00000001 VOL: 0
+	#define __SLEEP_DEFINED__
+;PCODE: $00000002 VOL: 0
+	.EQU __se_bit=0x80
+;PCODE: $00000003 VOL: 0
+	.EQU __sm_mask=0x70
+;PCODE: $00000004 VOL: 0
+	.EQU __sm_powerdown=0x20
+;PCODE: $00000005 VOL: 0
+	.EQU __sm_powersave=0x30
+;PCODE: $00000006 VOL: 0
+	.EQU __sm_standby=0x60
+;PCODE: $00000007 VOL: 0
+	.EQU __sm_ext_standby=0x70
+;PCODE: $00000008 VOL: 0
+	.EQU __sm_adc_noise_red=0x10
+;PCODE: $00000009 VOL: 0
+	.SET power_ctrl_reg=mcucr
+;PCODE: $0000000A VOL: 0
+	#endif
+;PCODE: $0000000B VOL: 0
+;PCODE: $0000000C VOL: 0
+;#include <stdio.h>  // Standard Input/Output functions
+;#include <delay.h>
+;#define LED PORTB.0
+;// Declare your global variables here
+;// Declare subroutines
+;void GPIO_Init(void);                   //GPIO initialization
+;void UART_Init(void);                   //UART initialization
+;void TransmitByte(unsigned char data);  //UART transmit 1 byte
+;char ReceiveChar(void);                 //Receive 1 byte from UDR
+;int  UART_Available(void);              //Check the FIFO to see if empty or not
+;long rec=0;
+;void main(void)
+; 0000 0025 {
+
+	.CSEG
+;PCODE: $0000000D VOL: 0
+; 0000 0026 GPIO_Init();
+;PCODE: $0000000E VOL: 0
+; 0000 0027 UART_Init();
+;PCODE: $0000000F VOL: 0
+; 0000 0028 #asm("sei")
+;PCODE: $00000010 VOL: 0
+	sei
+;PCODE: $00000011 VOL: 0
+; 0000 0029 while (1)
+;PCODE: $00000012 VOL: 0
+; 0000 002A {
+; 0000 002B     if(UART_Available()){  /*Check if data in RX buffer not empty*/
+;PCODE: $00000013 VOL: 0
+;PCODE: $00000014 VOL: 0
+;PCODE: $00000015 VOL: 0
+; 0000 002C     rec=ReceiveChar();
+;PCODE: $00000016 VOL: 0
+;PCODE: $00000017 VOL: 0
+;PCODE: $00000018 VOL: 0
+; 0000 002D     if (rec<50) LED=1;
+;PCODE: $00000019 VOL: 0
+;PCODE: $0000001A VOL: 0
+;PCODE: $0000001B VOL: 0
+;PCODE: $0000001C VOL: 0
+;PCODE: $0000001D VOL: 0
+; 0000 002E     else        LED=0;
+;PCODE: $0000001E VOL: 0
+;PCODE: $0000001F VOL: 0
+;PCODE: $00000020 VOL: 0
+;PCODE: $00000021 VOL: 0
+; 0000 002F     TransmitByte(rec);
+;PCODE: $00000022 VOL: 0
+;PCODE: $00000023 VOL: 0
+;PCODE: $00000024 VOL: 0
+; 0000 0030     }
+; 0000 0031 }}
+;PCODE: $00000025 VOL: 0
+;PCODE: $00000026 VOL: 0
+;PCODE: $00000027 VOL: 0
+;PCODE: $00000028 VOL: 0
+;PCODE: $00000029 VOL: 0
+;PCODE: $0000002A VOL: 0
+;// Subroutines define section
+;//--------------------------------GPIO--------------------------------//
+;//GPIO initilization
+;//Define output, input pins
+;void GPIO_Init(void)
+; 0000 0037 {
+;PCODE: $0000002B VOL: 0
+;PCODE: $0000002C VOL: 0
+; 0000 0038 // PB0 LED to test system
+; 0000 0039 DDRB=0x01;
+;PCODE: $0000002D VOL: 0
+;PCODE: $0000002E VOL: 0
+; 0000 003A // Port D initialization
+; 0000 003B // PD1 output for transmitter pin
+; 0000 003C DDRD|=0x02;
+;PCODE: $0000002F VOL: 0
+;PCODE: $00000030 VOL: 0
+; 0000 003D };
+;PCODE: $00000031 VOL: 0
+;PCODE: $00000032 VOL: 0
+;/*-----------------------------------------------------------------------*/
+;//UART initilization
+;//Define Frame struture, Baud rate,...
+;void UART_Init(void){
+; 0000 0041 void UART_Init(void){
+;PCODE: $00000033 VOL: 0
+;PCODE: $00000034 VOL: 0
+; 0000 0042 // USART initialization
+; 0000 0043 // Communication Parameters: 7 Data, 1 Stop, Even parity
+; 0000 0044 // USART Mode: ASync
+; 0000 0045 // USART Baud Rate: 9600
+; 0000 0046 UCSRA=(0<<RXC) | (0<<TXC) | (0<<UDRE) | (0<<FE) | (0<<DOR) | (0<<UPE) | (0<<U2X) | (0<<MPCM);
+;PCODE: $00000035 VOL: 0
+;PCODE: $00000036 VOL: 0
+; 0000 0047 /* UCSRA - UART Control and Status Register A
+; 0000 0048 RXC -  Receive complete flag
+; 0000 0049        +0 - Receive buffer empty
+; 0000 004A        +1 - There are unread data in receive buffer
+; 0000 004B TXC -  Transmit complete flag
+; 0000 004C        +0 - Transmit ISR complete or write 1 the its location
+; 0000 004D        +1 - There are no data in transmit buffer
+; 0000 004E UDRE-  USART data register empty
+; 0000 004F FE  -  Frame error
+; 0000 0050 DOR -  Data OveRun
+; 0000 0051 PE  -  Parity error
+; 0000 0052 U2X -  Double the USART transmission speed
+; 0000 0053 MPCM-  Multi-processor Communication mod  */
+; 0000 0054 UCSRB=(0<<RXCIE) | (0<<TXCIE) | (0<<UDRIE) | (1<<RXEN) | (1<<TXEN) | (0<<UCSZ2) | (0<<RXB8) | (0<<TXB8);
+;PCODE: $00000037 VOL: 0
+;PCODE: $00000038 VOL: 0
+; 0000 0055 /* USART Control and status register B
+; 0000 0056 RXCIE   -   RX Complete Interrupt Enable            - 0 Diasble interrupt
+; 0000 0057 TXCIE   -   Transmit Complete Interrupt Enable      - 0 Disable interrupt
+; 0000 0058 UDRIE   -   Data Register Empty Interrupt Enable    - 0 Disable interrupt
+; 0000 0059 RXEN    -   Receiver Enable                         - 1 Enable USART receiver
+; 0000 005A TXEN    -   Transmitter Enable                      - 1 Enable USART transmitter
+; 0000 005B USCZ    -   Character size                          - 011 8 bits data
+; 0000 005C RXB8    -   Receive Data Bit 8
+; 0000 005D TXB8    -   Transmit Data Bit 8
+; 0000 005E */
+; 0000 005F UCSRC=(1<<URSEL)|(0<<UMSEL)|(1 <<UPM1)|(0<<UPM0)|(0<<USBS)|(1<<UCSZ1)|(0<<UCSZ0)|(0<<UCPOL);
+;PCODE: $00000039 VOL: 0
+;PCODE: $0000003A VOL: 0
+; 0000 0060 /*
+; 0000 0061 URSEL   -   Register Select         - Must be 1 when write to UCSRC
+; 0000 0062 UMSEL   -   Mode Select     - 0     - Asynchronous
+; 0000 0063 UPM     -   Parity Mode     - 10    - Even mode
+; 0000 0064 USBS    -   Stop Bit Select - 0     - 1 bit
+; 0000 0065 UCSZ    -   Character Size  - 010   - 7 bit
+; 0000 0066 UCPOL   -   Clock Polarity  - 0     - Transmit Rising edge- Receive Falling edge
+; 0000 0067 */
+; 0000 0068 UBRRH=0x00; //Set baud rate at 9600
+;PCODE: $0000003B VOL: 0
+;PCODE: $0000003C VOL: 0
+; 0000 0069 UBRRL=0x33; //UBRR_value=(ClockSpeed/16/Baud_rate)-1 max 2^12-1
+;PCODE: $0000003D VOL: 0
+;PCODE: $0000003E VOL: 0
+; 0000 006A };
+;PCODE: $0000003F VOL: 0
+;PCODE: $00000040 VOL: 0
+;/*----------------Transmit data--------------------------*/
+;//Send 1 byte of data
+;//Input data to transmit
+;void TransmitByte(unsigned char data){
+; 0000 006E void TransmitByte(unsigned char data){
+;PCODE: $00000041 VOL: 0
+;PCODE: $00000042 VOL: 0
+; 0000 006F     while ((UCSRA & (1<<UDRE))==0); /* Wait for empty transmit buffer */
+;PCODE: $00000043 VOL: 0
+;	data -> Y+0
+;PCODE: $00000044 VOL: 0
+;PCODE: $00000045 VOL: 0
+;PCODE: $00000046 VOL: 0
+;PCODE: $00000047 VOL: 0
+;PCODE: $00000048 VOL: 0
+;PCODE: $00000049 VOL: 0
+; 0000 0070     UDR = data;                     /* Start transmittion */
+;PCODE: $0000004A VOL: 0
+;PCODE: $0000004B VOL: 0
+; 0000 0071 }
+;PCODE: $0000004C VOL: 0
+;PCODE: $0000004D VOL: 0
+;PCODE: $0000004E VOL: 0
+;/*----------------Receive data--------------------------*/
+;//Receive data
+;//Output data in UDR (Buffer)
+;char ReceiveChar(void) {
+; 0000 0075 char ReceiveChar(void) {
+;PCODE: $0000004F VOL: 0
+;PCODE: $00000050 VOL: 0
+; 0000 0076    return UDR;                      /* Read the data from the RX buffer*/
+;PCODE: $00000051 VOL: 0
+;PCODE: $00000052 VOL: 0
+; 0000 0077 }
+;PCODE: $00000053 VOL: 0
+;/*----------------Check UART available--------------------------*/
+;//Check UART available
+;int UART_Available(void){
+; 0000 007A int UART_Available(void){
+;PCODE: $00000054 VOL: 0
+;PCODE: $00000055 VOL: 0
+; 0000 007B    if ((UCSRA & 0x80)==0)       return 0; //Receiver buffer empty
+;PCODE: $00000056 VOL: 0
+;PCODE: $00000057 VOL: 0
+;PCODE: $00000058 VOL: 0
+;PCODE: $00000059 VOL: 0
+;PCODE: $0000005A VOL: 0
+; 0000 007C    else                         return 1; //Not empty
+;PCODE: $0000005B VOL: 0
+;PCODE: $0000005C VOL: 0
+;PCODE: $0000005D VOL: 0
+; 0000 007D }
+;PCODE: $0000005E VOL: 0
+;PCODE: $0000005F VOL: 0
+;PCODE: $00000060 VOL: 0
+;/*---------------------------------------------------------------------------------------------------*/
